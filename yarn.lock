@@ -1582,6 +1582,11 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+sweetalert2@^11.12.3:
+  version "11.12.3"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.12.3.tgz#ce272d8c8d0754090a77465b89769d45430e6199"
+  integrity sha512-tgGJSgfSV/xK113JEvhjwqKAuBYLXsZf0z+tGlHKQNnsLMi4eSNuzn9tt5hUdvjOVTLSPDgo0Lc+tnjy9Uj7Og==
+
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"

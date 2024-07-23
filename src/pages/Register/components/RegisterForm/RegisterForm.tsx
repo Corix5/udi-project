@@ -1,5 +1,14 @@
 import { useState } from "react";
+import {
+  validateIdNumber,
+  validateEmail,
+  validateName,
+  validateForm
+} from "./formValidations";
 import "./RegisterForm.css";
+import FormButton from "../FormButtons/FormButton";
+import user from "../../../../assets/user.svg";
+import erase from "../../../../assets/erase.svg";
 
 const RegisterForm = () => {
   interface Student {
@@ -24,6 +33,8 @@ const RegisterForm = () => {
     comment: "",
   });
 
+  const [error, setError] = useState("");
+
   const {
     name,
     idNumber,
@@ -43,14 +54,14 @@ const RegisterForm = () => {
     const { name, value } = e.currentTarget;
 
     if (name === "idNumber") {
-      if (/^\d*$/.test(value) && value.length <= 10) {
+      if (validateIdNumber(value)) {
         setStudent({
           ...student,
           [name]: value,
         });
       }
     } else if (name === "name") {
-      if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ´\s]*$/.test(value)) {
+      if (validateName(value)) {
         setStudent({
           ...student,
           [name]: value,
@@ -64,15 +75,25 @@ const RegisterForm = () => {
     }
   };
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const eraseFields = () => {
+    setStudent({
+      name: "",
+      idNumber: "",
+      email: "",
+      equipment: "",
+      date: "",
+      entryTime: "",
+      departureTime: "",
+      comment: "",
+    });  
+  }
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateEmail(student.email)) {
-      alert("Por favor ingresa un correo electrónico válido.");
+    validateEmail(email);
+
+    if (!validateForm(student)) {
+      setError("boder border-danger");
     }
   };
 
@@ -85,7 +106,8 @@ const RegisterForm = () => {
           </label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${!name && error}`}
+            placeholder="Nombre completo"
             id="name"
             name="name"
             value={name}
@@ -99,7 +121,8 @@ const RegisterForm = () => {
           </label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${!idNumber && error}`}
+            placeholder="Boleta"
             name="idNumber"
             id="id-number"
             value={idNumber}
@@ -115,7 +138,8 @@ const RegisterForm = () => {
           </label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${!email && error}`}
+            placeholder="Correo"
             id="email"
             name="email"
             value={email}
@@ -130,7 +154,7 @@ const RegisterForm = () => {
           <select
             name="equipment"
             id="equipment"
-            className="form-select"
+            className={`form-select ${!equipment && error}`}
             value={equipment}
             onChange={handleChange}
           >
@@ -148,7 +172,7 @@ const RegisterForm = () => {
           </label>
           <input
             type="date"
-            className="form-control"
+            className={`form-control ${!date && error}`}
             name="date"
             value={date}
             onChange={handleChange}
@@ -161,7 +185,7 @@ const RegisterForm = () => {
           </label>
           <input
             type="time"
-            className="form-control"
+            className={`form-control ${!entryTime && error}`}
             id="entry-time"
             name="entryTime"
             value={entryTime}
@@ -199,10 +223,9 @@ const RegisterForm = () => {
         </div>
       </section>
 
-      <section className="d-flex justify-content-center">
-        <button type="submit" className="btn btn-primary">
-          Registrar
-        </button>
+      <section className="d-flex justify-content-center gap-5">
+        <FormButton type="submit" text="Registrar" svg={user}/>
+        <FormButton type="button" text="Borrar" svg={erase} method={eraseFields}/>
       </section>
     </form>
   );
