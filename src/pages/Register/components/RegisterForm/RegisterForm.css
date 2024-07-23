@@ -1,0 +1,41 @@
+.input-gap{
+    gap: 8rem;
+}
+
+.input-container input{
+    width: 20rem;
+}
+
+.input-container select{
+    width: 20rem;
+}
+
+.input-container-time input{
+    width: 10.5rem;
+}
+
+.textarea{
+    width: 48rem;
+    height: 100px !important;
+}
+
+
+@media (max-width: 768px) {
+    .name-id{
+        flex-direction: column;
+        padding: 2rem;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .input-container{
+        width: 70%;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .input-container{
+        width: 90%;
+    }
+}
