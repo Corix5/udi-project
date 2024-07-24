@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
-export const validateIdNumber = (idNumber: string) => {
-  return /^\d*$/.test(idNumber) && idNumber.length <= 10;
+export const validateid_number = (id_number: string) => {
+  return /^\d*$/.test(id_number) && id_number.length <= 10;
 };
 
 export const validateName = (name: string) => {
@@ -52,19 +52,29 @@ export const alertEmptyFields = () => {
 export const validateForm = (student: any) => {
   if (
     student.name === "" ||
-    student.idNumber === "" ||
+    student.id_number === "" ||
     student.email === "" ||
     student.equipment === "" ||
     student.date === "" ||
-    student.entryTime === ""
+    student.entry_time === ""
   ) {
     alertEmptyFields();
     return false;
   } else {
-    Swal.fire({
-      title: "¡Registro exitoso!",
-      icon: "success"
-    });
     return true;
   }
+}
+
+export const registerAlert = () => {
+  Swal.fire({
+    title: "¡Registro exitoso!",
+    icon: "success"
+  });
+}
+
+export const badRegisterAlert = () => {
+  Swal.fire({
+    title: "Ocurrió un error",
+    icon: "error"
+  });
 }

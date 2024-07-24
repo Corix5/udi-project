@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  validateIdNumber,
+  validateid_number,
   validateEmail,
   validateName,
-  validateForm
+  validateForm,
+  registerAlert,
+  badRegisterAlert,
 } from "./formValidations";
+import { createStudent } from "../../../../api/student";
+import { getEquipments } from "../../../../api/equipments";
 import "./RegisterForm.css";
 import FormButton from "../../../../components/FormButtons/FormButton";
 import user from "../../../../assets/user.svg";
@@ -13,36 +17,53 @@ import erase from "../../../../assets/erase.svg";
 const RegisterForm = () => {
   interface Student {
     name: string;
-    idNumber: string;
+    id_number: string;
     email: string;
     equipment: string;
     date: string;
-    entryTime: string;
-    departureTime: string;
+    entry_time: string;
+    departure_time: string;
     comment: string;
   }
 
+  interface Equipment {
+    id: string,
+    equipment_name: string,
+    state: string
+  }
+
+  const [equipments, setEquipments] = useState([]);
+
+  useEffect(() =>{
+    const fetchData = async () =>{
+      const result = await getEquipments();
+      setEquipments(result.data)
+    }
+    fetchData();
+  }, []);
+
   const [student, setStudent] = useState({
     name: "",
-    idNumber: "",
+    id_number: "",
     email: "",
     equipment: "",
     date: "",
-    entryTime: "",
-    departureTime: "",
+    entry_time: "",
+    departure_time: "",
     comment: "",
   });
+
 
   const [error, setError] = useState("");
 
   const {
     name,
-    idNumber,
+    id_number,
     email,
     equipment,
     date,
-    entryTime,
-    departureTime,
+    entry_time,
+    departure_time,
     comment,
   }: Student = student;
 
@@ -53,8 +74,8 @@ const RegisterForm = () => {
   ) => {
     const { name, value } = e.currentTarget;
 
-    if (name === "idNumber") {
-      if (validateIdNumber(value)) {
+    if (name === "id_number") {
+      if (validateid_number(value)) {
         setStudent({
           ...student,
           [name]: value,
@@ -78,22 +99,37 @@ const RegisterForm = () => {
   const eraseFields = () => {
     setStudent({
       name: "",
-      idNumber: "",
+      id_number: "",
       email: "",
       equipment: "",
       date: "",
-      entryTime: "",
-      departureTime: "",
+      entry_time: "",
+      departure_time: "",
       comment: "",
-    });  
-  }
+    });
+  };
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     validateEmail(email);
 
+    const studentData = {
+      ...student, 
+      departure_time: student.departure_time === "" ? null : student.departure_time,
+      comment: student.comment === "" ? "Sin comentarios" : student.comment
+    }
+
     if (!validateForm(student)) {
       setError("boder border-danger");
+    }
+
+    try {
+      console.log(studentData);
+      
+      await createStudent(studentData);
+      registerAlert();
+    } catch (error) {
+      badRegisterAlert;
     }
   };
 
@@ -121,11 +157,11 @@ const RegisterForm = () => {
           </label>
           <input
             type="text"
-            className={`form-control ${!idNumber && error}`}
+            className={`form-control ${!id_number && error}`}
             placeholder="Boleta"
-            name="idNumber"
+            name="id_number"
             id="id-number"
-            value={idNumber}
+            value={id_number}
             onChange={handleChange}
           />
         </div>
@@ -159,8 +195,11 @@ const RegisterForm = () => {
             onChange={handleChange}
           >
             <option value="">Seleccionar equipo</option>
-            <option value="Lenovo 1">Lenovo 1</option>
-            <option value="Lenovo 2">Lenovo 2</option>
+            {
+              equipments.filter((equipment:Equipment) => equipment.state).map((equipment:Equipment) => (
+                <option key={equipment.id} value={equipment.id}>{equipment.equipment_name}</option>
+              ))
+            }
           </select>
         </div>
       </section>
@@ -185,10 +224,10 @@ const RegisterForm = () => {
           </label>
           <input
             type="time"
-            className={`form-control ${!entryTime && error}`}
+            className={`form-control ${!entry_time && error}`}
             id="entry-time"
-            name="entryTime"
-            value={entryTime}
+            name="entry_time"
+            value={entry_time}
             onChange={handleChange}
           />
         </div>
@@ -201,8 +240,8 @@ const RegisterForm = () => {
             type="time"
             className="form-control"
             id="departure-time"
-            name="departureTime"
-            value={departureTime}
+            name="departure_time"
+            value={departure_time}
             onChange={handleChange}
             disabled
           />
@@ -224,8 +263,19 @@ const RegisterForm = () => {
       </section>
 
       <section className="d-flex justify-content-center gap-5">
-        <FormButton type="submit" text="Registrar" svg={user} className="btn btn-light d-flex gap-2 align-items-center"/>
-        <FormButton type="button" text="Borrar" svg={erase} method={eraseFields} className="btn btn-light d-flex gap-2 align-items-center"/>
+        <FormButton
+          type="submit"
+          text="Registrar"
+          svg={user}
+          className="btn btn-light d-flex gap-2 align-items-center"
+        />
+        <FormButton
+          type="button"
+          text="Borrar"
+          svg={erase}
+          method={eraseFields}
+          className="btn btn-light d-flex gap-2 align-items-center"
+        />
       </section>
     </form>
   );
