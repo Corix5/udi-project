@@ -6,7 +6,7 @@ import {
   validateForm
 } from "./formValidations";
 import "./RegisterForm.css";
-import FormButton from "../FormButtons/FormButton";
+import FormButton from "../../../../components/FormButtons/FormButton";
 import user from "../../../../assets/user.svg";
 import erase from "../../../../assets/erase.svg";
 
@@ -209,7 +209,7 @@ const RegisterForm = () => {
         </div>
       </section>
 
-      <section className="mb-2 d-flex justify-content-center">
+      <section className="mb-2 d-flex justify-content-center textarea-container">
         <div className="form-floating ">
           <textarea
             name="comment"
@@ -224,8 +224,8 @@ const RegisterForm = () => {
       </section>
 
       <section className="d-flex justify-content-center gap-5">
-        <FormButton type="submit" text="Registrar" svg={user}/>
-        <FormButton type="button" text="Borrar" svg={erase} method={eraseFields}/>
+        <FormButton type="submit" text="Registrar" svg={user} className="btn btn-light d-flex gap-2 align-items-center"/>
+        <FormButton type="button" text="Borrar" svg={erase} method={eraseFields} className="btn btn-light d-flex gap-2 align-items-center"/>
       </section>
     </form>
   );

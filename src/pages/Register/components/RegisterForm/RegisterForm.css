@@ -21,21 +21,54 @@
 
 
 @media (max-width: 768px) {
-    .name-id{
+
+    .input-gap{
         flex-direction: column;
-        padding: 2rem;
+        padding: 0.5rem 2rem;
         align-items: center;
-        gap: 2rem;
+        gap: 1rem;
     }
 
     .input-container{
-        width: 70%;
+        width: 80%;
+    }
+
+    .input-container input{
+        width: 100%;
+    }
+
+    .input-container select{
+        width: 100%;
+    }
+
+    .input-container-time{
+        width: 80%;
+    }
+
+    .input-container-time input{
+        width: 100%;
+    }
+
+    .textarea-container{
+        width: 100%;
+    }
+
+    .textarea{
+        width: 26rem;
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
 
     .input-container{
-        width: 90%;
+        width: 95%;
+    }
+
+    .input-container-time{
+        width: 95%;
+    }
+
+    .textarea{
+        width: 18rem;
     }
 }

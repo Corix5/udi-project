@@ -1,14 +1,15 @@
 interface FormButtonProps {
   type: "submit" | "button";
   svg?: string;
-  text: string;
+  text?: string;
   method?: () => void;
+  className?: string;
 }
 
-const FormButton = ({type, svg, text, method}: FormButtonProps ) => {
+const FormButton = ({type, svg, text, method, className}: FormButtonProps ) => {
   return (
     <>
-      <button onClick={method} type={type} className="btn btn-light d-flex gap-2 align-center">
+      <button onClick={method} type={type} className={className}>
         <img src={svg} alt="button" />
         {text}
         </button>
