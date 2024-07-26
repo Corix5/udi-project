@@ -7,14 +7,20 @@ import {
   registerAlert,
   badRegisterAlert,
 } from "./formValidations";
-import { createStudent } from "../../../../api/student";
+import { createStudent, getStudentById, updateStudent } from "../../../../api/student";
 import { getEquipments } from "../../../../api/equipments";
 import "./RegisterForm.css";
 import FormButton from "../../../../components/FormButtons/FormButton";
 import user from "../../../../assets/user.svg";
 import erase from "../../../../assets/erase.svg";
 
-const RegisterForm = () => {
+
+interface RegisterFormProps {
+  id?: string;
+}
+
+
+const RegisterForm = ({id}: RegisterFormProps ) => {
   interface Student {
     name: string;
     id_number: string;
@@ -36,6 +42,15 @@ const RegisterForm = () => {
 
   useEffect(() =>{
     const fetchData = async () =>{
+      if(id){
+        const student = await getStudentById(id);
+        //darle formato a la fecha
+        student.data.date = student.data.date.split("T")[0];
+        if(student.data.departure_time === null){
+          student.data.departure_time = "";
+        }
+        setStudent(student.data);
+      }
       const result = await getEquipments();
       setEquipments(result.data)
     }
@@ -124,8 +139,10 @@ const RegisterForm = () => {
     }
 
     try {
-      console.log(studentData);
-      
+      if(id){
+        await updateStudent(id, studentData);
+        return registerAlert();
+      }      
       await createStudent(studentData);
       registerAlert();
     } catch (error) {
@@ -196,9 +213,14 @@ const RegisterForm = () => {
           >
             <option value="">Seleccionar equipo</option>
             {
-              equipments.filter((equipment:Equipment) => equipment.state).map((equipment:Equipment) => (
+              !id ? (              
+                equipments.filter((equipment:Equipment) => equipment.state).map((equipment:Equipment) => (
                 <option key={equipment.id} value={equipment.id}>{equipment.equipment_name}</option>
-              ))
+              ))):(
+                equipments.map((equipment:Equipment) => (
+                  <option key={equipment.id} value={equipment.id}>{equipment.equipment_name}</option>
+                ))
+              )
             }
           </select>
         </div>
@@ -243,7 +265,7 @@ const RegisterForm = () => {
             name="departure_time"
             value={departure_time}
             onChange={handleChange}
-            disabled
+            {...(id ? {} : { disabled: true })}
           />
         </div>
       </section>
@@ -265,7 +287,7 @@ const RegisterForm = () => {
       <section className="d-flex justify-content-center gap-5">
         <FormButton
           type="submit"
-          text="Registrar"
+          text={id ? "Actualizar" : "Registrar"}
           svg={user}
           className="btn btn-light d-flex gap-2 align-items-center"
         />

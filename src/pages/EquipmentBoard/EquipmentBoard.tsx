@@ -37,8 +37,8 @@ const EquipmentBoard = () => {
         LABORATORIO DE TIEMPO LIBRE <br /> TABLERO DE EQUIPOS
       </h2>
       <div className="container text-center mt-4">
-        {rows.map((rows: Equipment[]) => (
-          <div className="row">
+        {rows.map((rows: Equipment[], index) => (
+          <div key={index} className="row">
             {rows.map((equipment: Equipment) => (
               <EquipmentBox
                 key={equipment.id}

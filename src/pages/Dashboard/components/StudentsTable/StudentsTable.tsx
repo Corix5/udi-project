@@ -27,6 +27,11 @@ const StudentsTable = () => {
     fetchData();
   }, []);
 
+  const handleUpdate = (id:string) => {
+    window.location.href = `/updateRegister/${id}`;  
+
+  }
+
   const handleDelete = async (id:string) => {
     await deleteStudent(id);
     setStudents(students.filter((student:Student) => student.id !== id));
@@ -65,6 +70,7 @@ const StudentsTable = () => {
                     type="button"
                     svg={update}
                     className="btn btn-warning"
+                    method={() => handleUpdate(student.id)}
                   />
                   <FormButton
                     type="button"
