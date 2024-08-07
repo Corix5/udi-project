@@ -4,11 +4,6 @@ interface Student {
   name: string;
   id_number: string;
   email: string;
-  equipment: string;
-  date: string;
-  entry_time: string;
-  departure_time: string | null;
-  comment: string | null;
 }
 
 const API_URL = 'http://localhost:3000/api';

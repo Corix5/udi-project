@@ -5,27 +5,41 @@ import {
   validateName,
   validateForm,
   registerAlert,
+  updateAlert,
   badRegisterAlert,
 } from "./formValidations";
-import { createStudent, getStudentById, updateStudent } from "../../../../api/student";
+import {
+  createStudent,
+  getStudentById,
+  getStudents,
+} from "../../../../api/student";
+import {
+  createRegister,
+  getRegisterId,
+  updateRegister,
+} from "../../../../api/register";
 import { getEquipments } from "../../../../api/equipments";
 import "./RegisterForm.css";
 import FormButton from "../../../../components/FormButtons/FormButton";
 import user from "../../../../assets/user.svg";
 import erase from "../../../../assets/erase.svg";
 
-
 interface RegisterFormProps {
-  id?: string;
+  student_id?: string;
+  register_id?: string;
 }
 
-
-const RegisterForm = ({id}: RegisterFormProps ) => {
+const RegisterForm = ({ student_id, register_id }: RegisterFormProps) => {
   interface Student {
+    id: string;
     name: string;
     id_number: string;
     email: string;
-    equipment: string;
+  }
+
+  interface Register {
+    student_id: string;
+    equipment_id: string;
     date: string;
     entry_time: string;
     departure_time: string;
@@ -33,27 +47,43 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
   }
 
   interface Equipment {
-    id: string,
-    equipment_name: string,
-    state: string
+    id?: string;
+    equipment_name: string;
+    state?: string;
   }
 
   const [equipments, setEquipments] = useState([]);
+  const [students, setStudents] = useState<Student[]>([]);
 
-  useEffect(() =>{
-    const fetchData = async () =>{
-      if(id){
-        const student = await getStudentById(id);
-        //darle formato a la fecha
-        student.data.date = student.data.date.split("T")[0];
-        if(student.data.departure_time === null){
-          student.data.departure_time = "";
+  useEffect(() => {
+    const fetchData = async () => {
+      if (register_id && student_id) {
+        const student = await getStudentById(student_id);
+        const registerResponse = await getRegisterId(student_id, register_id);
+        const registerData = registerResponse.data && registerResponse.data[0];
+        
+        if (registerData.date) {
+          registerData.date = registerData.date.split("T")[0];
+        }
+
+        if (registerData.equipment_name) {
+          setEquipment({
+            ...equipment,
+            equipment_name: registerData.equipment_name,
+          });
+        }
+
+        if (registerData.departure_time === null) {
+          registerData.departure_time = "";
         }
         setStudent(student.data);
+        setRegister(registerData);
       }
+      const resultStudents = await getStudents();
       const result = await getEquipments();
-      setEquipments(result.data)
-    }
+      setEquipments(result.data);
+      setStudents(resultStudents.data);
+    };
     fetchData();
   }, []);
 
@@ -61,26 +91,33 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
     name: "",
     id_number: "",
     email: "",
-    equipment: "",
+  });
+
+  const [register, setRegister] = useState({
+    student_id: "",
+    equipment_id: "",
     date: "",
     entry_time: "",
     departure_time: "",
     comment: "",
   });
 
+  const [equipment, setEquipment] = useState({
+    equipment_name: "",
+  });
 
   const [error, setError] = useState("");
 
-  const {
-    name,
-    id_number,
-    email,
-    equipment,
-    date,
-    entry_time,
-    departure_time,
-    comment,
-  }: Student = student;
+  const { name, id_number, email }: Student = { ...student, id: "" };
+
+  const { date, entry_time, departure_time, comment, equipment_id }: Register = register;
+
+  const { equipment_name }: Equipment = equipment;
+
+  const formatTime = (time: string): string => {
+    const parts = time.split(":");
+    return parts.length === 2 ? `${time}:00` : time;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -95,6 +132,19 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
           ...student,
           [name]: value,
         });
+
+        //si exitse ya el id_number, asigna automaticamente el nombre y correo
+        const studentExists = students.find(
+          (student: Student) => student.id_number === value
+        );
+
+        if (studentExists) {
+          setStudent({
+            name: studentExists.name,
+            id_number: studentExists.id_number,
+            email: studentExists.email,
+          });
+        }
       }
     } else if (name === "name") {
       if (validateName(value)) {
@@ -103,9 +153,23 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
           [name]: value,
         });
       }
-    } else {
+    } else if (name === "email") {
       setStudent({
         ...student,
+        [name]: value,
+      });
+    } else if (name === "equipment_name") {
+      setEquipment({
+        ...equipment,
+        [name]: value,
+      });
+      setRegister({
+        ...register,
+        equipment_id: value,
+      });
+    } else {
+      setRegister({
+        ...register,
         [name]: value,
       });
     }
@@ -116,7 +180,11 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
       name: "",
       id_number: "",
       email: "",
-      equipment: "",
+    });
+
+    setRegister({
+      student_id: "",
+      equipment_id: "",
       date: "",
       entry_time: "",
       departure_time: "",
@@ -128,26 +196,50 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
     e.preventDefault();
     validateEmail(email);
 
+    const registerData = {
+      ...register,
+      entry_time: formatTime(register.entry_time),
+      departure_time:
+        register.departure_time === "" ? null : register.departure_time,
+      comment: register.comment === "" ? "Sin comentarios" : register.comment,
+    };
+
     const studentData = {
-      ...student, 
-      departure_time: student.departure_time === "" ? null : student.departure_time,
-      comment: student.comment === "" ? "Sin comentarios" : student.comment
-    }
+      ...student,
+    };
 
     if (!validateForm(student)) {
       setError("boder border-danger");
     }
-
-    try {
-      if(id){
-        await updateStudent(id, studentData);
-        return registerAlert();
-      }      
-      await createStudent(studentData);
-      registerAlert();
-    } catch (error) {
-      badRegisterAlert;
+    else{
+      try {
+        if (register_id && student_id) {
+          await updateRegister(student_id, register_id, registerData);
+          return updateAlert();
+        }
+  
+        // Crear el estudiante primero si id_number no existe
+        const studentExists = students.find(
+          (student: Student) => student.id_number === id_number
+        );
+  
+        if (!studentExists) {
+          const student = await createStudent(studentData);
+          registerData.student_id = student.data.id;
+        } else {
+          registerData.student_id = studentExists.id;
+        }
+  
+        // Crear el registro con el student_id actualizado
+        await createRegister(registerData);
+  
+        registerAlert();
+      } catch (error) {
+        badRegisterAlert();
+      }
     }
+
+
   };
 
   return (
@@ -205,23 +297,26 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
             Equipo asignado
           </label>
           <select
-            name="equipment"
-            id="equipment"
-            className={`form-select ${!equipment && error}`}
-            value={equipment}
+            name="equipment_name"
+            id="equipment_name"
+            className={`form-select ${!equipment_name && error}`}
+            value={equipment_id}
             onChange={handleChange}
           >
             <option value="">Seleccionar equipo</option>
-            {
-              !id ? (              
-                equipments.filter((equipment:Equipment) => equipment.state).map((equipment:Equipment) => (
-                <option key={equipment.id} value={equipment.id}>{equipment.equipment_name}</option>
-              ))):(
-                equipments.map((equipment:Equipment) => (
-                  <option key={equipment.id} value={equipment.id}>{equipment.equipment_name}</option>
-                ))
-              )
-            }
+            {!register_id
+              ? equipments
+                  .filter((equipment: Equipment) => equipment.state === "available")
+                  .map((equipment: Equipment) => (
+                    <option key={equipment.id} value={equipment.id}>
+                      {equipment.equipment_name}
+                    </option>
+                  ))
+              : equipments.map((equipment: Equipment) => (
+                  <option key={equipment.id} value={equipment.id}>
+                    {equipment.equipment_name}
+                  </option>
+                ))}
           </select>
         </div>
       </section>
@@ -265,7 +360,7 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
             name="departure_time"
             value={departure_time}
             onChange={handleChange}
-            {...(id ? {} : { disabled: true })}
+            {...(register_id ? {} : { disabled: true })}
           />
         </div>
       </section>
@@ -287,7 +382,7 @@ const RegisterForm = ({id}: RegisterFormProps ) => {
       <section className="d-flex justify-content-center gap-5">
         <FormButton
           type="submit"
-          text={id ? "Actualizar" : "Registrar"}
+          text={register_id ? "Actualizar" : "Registrar"}
           svg={user}
           className="btn btn-light d-flex gap-2 align-items-center"
         />

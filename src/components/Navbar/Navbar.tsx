@@ -1,10 +1,12 @@
 import {Link} from "react-router-dom";
+import escom from "../../assets/escudo_ESCOM.png";
+import "./Navbar.css";
 
 const Navbar = () => {
     return(
-<nav className="navbar navbar-expand-lg bg-body-tertiary">
+<nav className="navbar navbar-expand-lg bg-body-tertiary nav">
   <div className="container-fluid">
-    <Link to="/" className="navbar-brand" >ESCOM</Link>
+    <Link to="/" className="navbar-brand" ><figure className="navbar-logo"><img src={escom} alt="escom" /></figure></Link>
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>

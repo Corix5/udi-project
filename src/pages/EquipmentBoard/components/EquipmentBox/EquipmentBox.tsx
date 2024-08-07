@@ -6,10 +6,13 @@ interface EquipmentBoxProps {
     }
 
 const EquipmentBox = ({image, title}: EquipmentBoxProps) => {
+    const numOfTitle = title.split(' ');
+    const onlyNum = numOfTitle[1];
+
     return (
         <div className="border equipment-box col">
             <img src={image} alt={title} />
-            <p>{title}</p>
+            <p>{onlyNum}</p>
         </div>
     )
 }

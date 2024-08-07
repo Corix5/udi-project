@@ -72,6 +72,13 @@ export const registerAlert = () => {
   });
 }
 
+export const updateAlert = () => {
+  Swal.fire({
+    title: "¡Registro actualizado!",
+    icon: "success"
+  });
+}
+
 export const badRegisterAlert = () => {
   Swal.fire({
     title: "Ocurrió un error",

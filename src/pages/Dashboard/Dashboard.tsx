@@ -5,7 +5,7 @@ import excel from "../../assets/excel.svg";
 const Dashboard = () => {
   return (
     <>
-      <h2 className="text-center fs-3 mt-4 p-1">LABORATORIO DE TIEMPO LIBRE <br /> LISTA DE ALUMNOS REGISTRADOS</h2>
+      <h2 className="text-center fs-3 mt-4 p-1">LABORATORIO DE TIEMPO LIBRE <br /> LISTA DE REGISTROS</h2>
       <StudentsTable />
       <div className="d-flex justify-content-center">
         <FormButton
