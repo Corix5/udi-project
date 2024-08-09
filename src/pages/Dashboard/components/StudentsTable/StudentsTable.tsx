@@ -55,13 +55,13 @@ const StudentsTable = () => {
           text: "Registro eliminado",
           icon: "success",
         });
+        await deleteRegister(student_id, register_id);
+        setRegisters(
+          registers.filter(
+            (register: Register) => register.register_id !== register_id
+          )
+        );
       }
-      await deleteRegister(student_id, register_id);
-      setRegisters(
-        registers.filter(
-          (register: Register) => register.register_id !== register_id
-        )
-      );
     });
   };
 
@@ -81,9 +81,10 @@ const StudentsTable = () => {
           text: "Registro eliminado",
           icon: "success",
         });
+
+        await deleteAllRegisters();
+        setRegisters([]);
       }
-      await deleteAllRegisters();
-      setRegisters([]);
     });
   };
 

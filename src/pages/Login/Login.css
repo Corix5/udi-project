@@ -1,0 +1,117 @@
+.general-login-container {
+  height: 100vh;
+  background-color: #16325c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 80%;
+}
+
+.carrousel-container {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #154779;
+  padding: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-item img {
+  width: 30rem;
+}
+
+.carousel {
+  flex-grow: 1;
+  max-width: 80%;
+}
+
+.login-form-container {
+  width: 50%;
+  height: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form-container form {
+  width: 80%;
+}
+
+.btn-escom {
+  background-color: #154779;
+  color: white;
+}
+
+.login-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-footer img {
+  margin-top: 30px;
+  width: 30rem;
+}
+
+@media screen and (max-width: 1440px) {
+  .login-footer img {
+    width: 25rem;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .login-footer img {
+    width: 20rem;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .carrousel-container {
+    display: none;
+  }
+
+  .login-form-container {
+    width: 100%;
+    height: 60%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .login-container {
+    width: 100%;
+  }
+
+  .login-form-container {
+    height: 50%;
+  }
+
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .login-footer img {
+    margin-top: 0;
+    width: 15rem;
+  }
+}

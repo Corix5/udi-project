@@ -208,7 +208,7 @@ const RegisterForm = ({ student_id, register_id }: RegisterFormProps) => {
       ...student,
     };
 
-    if (!validateForm(student)) {
+    if (!validateForm(student, register)) {
       setError("boder border-danger");
     }
     else{

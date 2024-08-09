@@ -49,14 +49,15 @@ export const alertEmptyFields = () => {
   });
 };
 
-export const validateForm = (student: any) => {
+export const validateForm = (student: any, register:any) => {
   if (
     student.name === "" ||
     student.id_number === "" ||
     student.email === "" ||
-    student.equipment === "" ||
-    student.date === "" ||
-    student.entry_time === ""
+    register.equipment_id === "" ||
+    register.equipment_name === "" ||
+    register.date === "" ||
+    register.entry_time === ""
   ) {
     alertEmptyFields();
     return false;
