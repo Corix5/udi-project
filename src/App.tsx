@@ -5,20 +5,22 @@ import EquipmentBoard from "./pages/EquipmentBoard/EquipmentBoard";
 import UpdateResgister from "./pages/UpdateRegister/UpdateRegister";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login";
-
-
-
+import { useLocation } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
 
 const App = () => {
+  const location = useLocation();
+  const noNavbarRoutes = ['/login'];
+
   return (
     <>
-      <Navbar></Navbar>
+      {!noNavbarRoutes.includes(location.pathname) && <Navbar />}
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/login" element={<Login/>}/>
-        <Route path="register" element={<Register />} />
-        <Route path="equipment" element={<EquipmentBoard />} />
-        <Route path={`/updateRegister/:student_id/:register_id`} element={<UpdateResgister/>}/>
+        <Route path="/register" element={<PrivateRoute><Register /></PrivateRoute>} />
+        <Route path="/equipment" element={<PrivateRoute><EquipmentBoard /></PrivateRoute>} />
+        <Route path="/updateRegister/:student_id/:register_id" element={<PrivateRoute><UpdateResgister /></PrivateRoute>} />
       </Routes>
     </>
   );

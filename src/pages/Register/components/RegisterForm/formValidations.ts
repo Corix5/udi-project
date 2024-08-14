@@ -86,3 +86,10 @@ export const badRegisterAlert = () => {
     icon: "error"
   });
 }
+
+export const invalidCredentialsAlert = () => {
+  Swal.fire({
+    title: "Credenciales inválidas",
+    icon: "error"
+  });
+}

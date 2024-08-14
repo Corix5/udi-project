@@ -11,6 +11,35 @@
     background-color: #16325c !important;
 }
 
+.navbar-nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-cont{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .nav-link{
     color: white !important;
+}
+
+.nav-logout{
+    color: white !important;
+    margin-bottom: 0;
+}
+
+.nav-logout:hover{
+    color: #f5f5f5 !important;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px){
+    .navbar-cont{
+        flex-direction: column;
+    }
+    
 }
