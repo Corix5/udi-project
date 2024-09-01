@@ -23,7 +23,6 @@ const Dashboard: React.FC = () => {
     const fetchData = async () => {
       const registerResponse = await getRegisters();
       setRegister(registerResponse.data);
-      console.log(registerResponse.data);
     };
     fetchData();
   }, []);

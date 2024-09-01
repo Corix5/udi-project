@@ -9,7 +9,9 @@ interface Register {
   comment: string | null;
 }
 
-const API_URL = 'https://udi-server-238vucyx8-daves-projects-2ad59da7.vercel.app/api';
+const API_URL = 'https://udi-server.vercel.app/api';
+//const API_URL = 'http://localhost:3001/api';
+
 export const getRegisters = async () => {
   return await axios.get(`${API_URL}/registers`);
 };

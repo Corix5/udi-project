@@ -12,7 +12,6 @@ const FormButton = ({type, svg, text, method, className}: FormButtonProps ) => {
       const result = method();
       if (result instanceof Promise) {
         result.then(() => {
-          console.log('Action completed');
         }).catch((error) => {
           console.error('Action failed', error);
         });

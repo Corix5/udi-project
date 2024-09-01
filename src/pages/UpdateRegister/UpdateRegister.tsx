@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 
 const UpdateRegister = () => {
   const { student_id, register_id } = useParams();
-  console.log('student_id:', student_id);
-  console.log('register_id:', register_id);
   return (
     <>
       <h2 className="text-center fs-3 mt-4 p-1">
