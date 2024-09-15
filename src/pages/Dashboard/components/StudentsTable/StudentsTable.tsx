@@ -58,8 +58,9 @@ const StudentsTable = () => {
 
         // Verifica permisos del administrador
         const adminInfo = await getAdminInfo();
-        // Supongamos que adminInfo tiene un campo `canDelete` que indica si puede eliminar
+        //adminInfo tiene un campo `canDelete` que indica si puede eliminar
         setHasDeletePermission(adminInfo.canDelete);
+        console.log("admin info", adminInfo);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -7,6 +7,7 @@ import { loginAdmin } from "../../api/admin";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate para la redirección
 
 const Login = () => {
+
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -32,7 +33,7 @@ const Login = () => {
 
         if (response.token) {
           localStorage.setItem("token", response.token); // Almacena el token en localStorage
-          navigate("/"); // Redirige al dashboard u otra ruta protegida
+          navigate(username !== "tablero_admin" ? "/" : "/equipment"); // Redirige al dashboard u otra ruta protegida
         } else {
           // Manejo de errores en caso de que no haya token en la respuesta
           invalidCredentialsAlert();

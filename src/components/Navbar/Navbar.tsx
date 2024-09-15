@@ -2,8 +2,25 @@ import { Link } from "react-router-dom";
 import escom from "../../assets/escudo_ESCOM.png";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
+import { getAdminInfo } from "../../api/admin";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [adminName, setAdminName] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getAdminInfo();
+        setAdminName(response.username);
+        console.log(response.username);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -32,21 +49,25 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse navbar-cont" id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/" className="nav-link active" aria-current="page">
-                Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="register" className="nav-link">
-                Registro
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="equipment" className="nav-link">
-                Tablero
-              </Link>
-            </li>
+            {adminName !== "tablero_admin" && (
+              <>
+                <li className="nav-item">
+                  <Link to="/" className="nav-link active" aria-current="page">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="register" className="nav-link">
+                    Registro
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="equipment" className="nav-link">
+                    Tablero
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
 
           <div>
