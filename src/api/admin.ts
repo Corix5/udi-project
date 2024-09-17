@@ -5,9 +5,9 @@ interface Admin {
   password: string;
 }
 
-const API_URL = 'https://udi-server.vercel.app/api';
+//const API_URL = 'https://udi-server.vercel.app/api';
 //const API_URL = 'https://10.3.56.38/api';
-
+const API_URL = 'http://192.168.100.207:3001/api';
 export const loginAdmin = async (admin: Admin) => {
   try {
     const response = await axios.post(`${API_URL}/login`, {

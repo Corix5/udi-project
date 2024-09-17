@@ -24,9 +24,24 @@ const groupEquipmentsCenter = (
   itemsPerRow: number
 ) => {
   const rows = [];
-  for (let i = 8; i < 26; i += itemsPerRow) {
-    rows.push(equipments.slice(i, i + itemsPerRow));
+
+  // Crear un subarreglo desde el índice 8 (número 9) hasta el 26
+  const selectedEquipments = equipments.slice(8, 26);
+
+  // Determinar cuántas filas necesitamos
+  const numRows = Math.ceil(selectedEquipments.length / itemsPerRow);
+
+  for (let i = 0; i < numRows; i++) {
+    const row = [];
+    for (let j = 0; j < itemsPerRow; j++) {
+      const index = i + j * numRows; // Índice que permite obtener los elementos por columna
+      if (index < selectedEquipments.length) {
+        row.push(selectedEquipments[index]);
+      }
+    }
+    rows.push(row);
   }
+
   return rows;
 };
 
@@ -55,9 +70,7 @@ const EquipmentBoard = () => {
 
   return (
     <>
-      <h2 className="text-center fs-3 mt-4">
-      TABLERO DE EQUIPOS
-      </h2>
+      <h2 className="text-center fs-3 mt-4">TABLERO DE EQUIPOS</h2>
 
       <div className="lab-container">
         <div className="left-lab">
@@ -68,7 +81,9 @@ const EquipmentBoard = () => {
                   <EquipmentBox
                     key={equipment.id}
                     title={equipment.equipment_name}
-                    image={equipment.state == "available" ? deviceFree : deviceBusy}
+                    image={
+                      equipment.state == "available" ? deviceFree : deviceBusy
+                    }
                   />
                 ))}
               </div>
@@ -84,7 +99,9 @@ const EquipmentBoard = () => {
                   <EquipmentBox
                     key={equipment.id}
                     title={equipment.equipment_name}
-                    image={equipment.state == "available" ? deviceFree : deviceBusy}
+                    image={
+                      equipment.state == "available" ? deviceFree : deviceBusy
+                    }
                   />
                 ))}
               </div>
@@ -100,7 +117,9 @@ const EquipmentBoard = () => {
                   <EquipmentBox
                     key={equipment.id}
                     title={equipment.equipment_name}
-                    image={equipment.state == "available" ? deviceFree : deviceBusy}
+                    image={
+                      equipment.state == "available" ? deviceFree : deviceBusy
+                    }
                   />
                 ))}
               </div>
